@@ -33,16 +33,17 @@ class Game {
         const float GRASS_LEVEL = 660.f;
         const float GRAVITY = 1000.0f;
         const float STAR_SPRITE_RATE = 1.f;
+        const float TIME_TO_DAY = 30.0f;
     private:
         SDL_Window* window;
         SDL_Renderer *renderer;
     
         bool mIsRunning;
-//        bool mIncreaseSpeed;
         int mPreviousTime;
         int mMusicChannel;
         bool mWin;
         float starSpriteTimer = 0.0f;
+        float mDayOpacity = 0.0f;
     
         void ProcessInput();
         void UpdateGame();
@@ -57,5 +58,6 @@ class Game {
         std::unordered_map<std::string, SDL_Texture*> textures;
         std::unordered_map<std::string, Mix_Chunk*> sounds;
         std::vector<class SpriteComponent*> mSprites;
+        class SDL_Texture* mBackgroundTextureDay;
 };
 

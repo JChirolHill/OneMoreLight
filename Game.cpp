@@ -114,11 +114,24 @@ void Game::UpdateGame() {
     deltaTime  = std::min(33, (currentTime - mPreviousTime)) / 1000.0f; // in seconds
     mPreviousTime = currentTime;
     
+    // update background to day, game stop condition
+    mDayOpacity += deltaTime * 255.0f / TIME_TO_DAY;
+    SDL_Log("opacity: %f", mDayOpacity);
+    if(mDayOpacity > 255.0f) {
+        mDayOpacity = 255.0f;
+        mPlayer->SetState(ActorState::Paused);
+    }
+    else {
+        SDL_SetTextureAlphaMod(mBackgroundTextureDay, (int)mDayOpacity);
+    }
+    
     // spawn new stars
-    starSpriteTimer += deltaTime;
-    if(starSpriteTimer > STAR_SPRITE_RATE) {
-        starSpriteTimer = 0.0f;
-        AddStar(new Star(this, true));
+    if(mPlayer->GetState() == ActorState::Active) {
+        starSpriteTimer += deltaTime;
+        if(starSpriteTimer > STAR_SPRITE_RATE) {
+            starSpriteTimer = 0.0f;
+            AddStar(new Star(this, true));
+        }
     }
     
     // make a copy of actors vector and update
@@ -196,10 +209,17 @@ void Game::RemoveSprite(SpriteComponent* sprite) {
 
 void Game::LoadData() {
     // background
-    Actor* background = new Actor(this);
-    background->SetPosition(Vector2(510.f, 380.f));
-    SpriteComponent* scBack = new SpriteComponent(background, 90);
-    scBack->SetTexture(GetTexture("Assets/NightBackground.png"));
+//    Actor* background = new Actor(this);
+//    background->SetPosition(Vector2(510.f, 380.f));
+//    SpriteComponent* scBack = new SpriteComponent(background, 90);
+//    scBack->SetTexture(GetTexture("Assets/NightBackground.png"));
+    
+    Actor* backgroundDay = new Actor(this);
+    backgroundDay->SetPosition(Vector2(510.f, 380.f));
+    SpriteComponent* scBackDay = new SpriteComponent(backgroundDay, 92);
+    mBackgroundTextureDay = GetTexture("Assets/DayBackground.png");
+    scBackDay->SetTexture(mBackgroundTextureDay);
+    SDL_SetTextureAlphaMod(mBackgroundTextureDay, (int)mDayOpacity);
     
     // load player
     mPlayer = new Player(this);
