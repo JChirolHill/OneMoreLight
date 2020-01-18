@@ -1,0 +1,32 @@
+images
+backdrop
+star
+lia walking with bag animation
+star progress graphics (empty half and full)
+lia standing
+lia making big star behind her back
+lia happy offering star
+speech bubbles
+sad aren sitting at tree
+aren sees the star
+aren and lia hug
+
+sound
+background music
+	https://www.bensound.com/royalty-free-music/track/acoustic-breeze
+	https://www.bensound.com/royalty-free-music/track/tenderness
+	https://www.zapsplat.com/music/star-gazing-wondrous-panoramic-music-with-a-cosmic-feel-slowly-evolving-pads-and-digital-synth-effects/
+star-catching
+	https://www.zapsplat.com/?s=star&post_type=music&sound-effect-category-id=
+running sound
+	https://www.zapsplat.com/?s=run&post_type=music&sound-effect-category-id=
+	running sound from mirror's edge
+happy ending sound
+	https://www.bensound.com/royalty-free-music/track/funny-song (beginning only)
+	https://www.bensound.com/royalty-free-music/track/sunny	
+
+optional
+picking which character
+moonrises at the end 
+time limit before sunrise
+
