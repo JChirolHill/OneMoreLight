@@ -18,9 +18,11 @@ public:
     
     void SwitchAnim(std::string animName);
     bool GetMovingRight() { return mMovingRight; }
+    bool mMovingRight = false;
+    
+    bool mPreparedStar = false;
 private:
     float mYSpeed;
     float mForwardSpeed = 500.0f;
-    bool mMovingRight = true;
     const float EDGE_OFFSET = 150.0f;
 };

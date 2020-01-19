@@ -14,15 +14,16 @@
 #include "Game.h"
 #include "Actor.h"
 #include "Player.h"
+#include "Loser.h"
 #include "Star.h"
 #include "SpriteComponent.h"
 #include "ProgressBar.h"
+#include "PlayerMove.h"
 
 Game::Game() {
     // set variables
     mIsRunning = true;
     mPreviousTime = SDL_GetTicks();
-    mWin = false;
     renderer = NULL;
     window = NULL;
     mPlayer = NULL;
@@ -121,7 +122,7 @@ void Game::UpdateGame() {
         mDayOpacity += deltaTime * 255.0f / TIME_TO_DAY;
         if(mDayOpacity > 255.0f) {
             mDayOpacity = 255.0f;
-            mGameOver = true;
+            mSunUp = true;
         }
         else {
             SDL_SetTextureAlphaMod(mBackgroundTextureDay, (int)mDayOpacity);
@@ -129,7 +130,7 @@ void Game::UpdateGame() {
     }
     
     // spawn new stars
-    if(!mGameOver) {
+    if(!mSunUp) {
         starSpriteTimer += deltaTime;
         if(starSpriteTimer > STAR_SPRITE_RATE) {
             starSpriteTimer = 0.0f;
@@ -138,8 +139,14 @@ void Game::UpdateGame() {
     }
     
     // stop player moving if all stars gone
-    if(mGameOver && mStars.size() == 0) {
-        mPlayer->SetState(ActorState::Paused);
+    if(mSunUp && mStars.size() == 0) {
+        mStarsDone = true;
+        if(mPlayer->DidWin(STARS_TO_WIN)) {
+            mWin = true;
+        }
+        else {
+            mWin = false;
+        }
     }
     
     // make a copy of actors vector and update
@@ -229,39 +236,14 @@ void Game::LoadData() {
     scBackDay->SetTexture(mBackgroundTextureDay);
     SDL_SetTextureAlphaMod(mBackgroundTextureDay, (int)mDayOpacity);
     
-    // load player
+    // load player and loser
+    mLoser = new Loser(this);
+    mLoser->SetPosition(Vector2(90.0f, GRASS_LEVEL - 40.0f));
     mPlayer = new Player(this);
-    mPlayer->SetPosition(Vector2(200.f, GRASS_LEVEL));
+    mPlayer->SetPosition(Vector2(SCREEN_WIDTH - 200.f, GRASS_LEVEL));
     
     // show progress bar
     mProgressBar = new ProgressBar(this);
-    
-    // load blocks from the input file
-//    std::ifstream inputFile("Assets/Level1.txt");
-//    std::string line;
-//    int i = 0;
-//    while(std::getline(inputFile, line)) {
-//        for(size_t j=0; j<line.length(); ++j) {
-//            char c = line[j];
-//            if(c == 'P') { // player
-//                mPlayer = new Player(this);
-//                mPlayer->SetPosition(Vector2(32 * j + WALL_DIMEN/2, 32 * i + WALL_DIMEN/2));
-//            }
-//            else if(c == 'Y') { // spawner
-//                Spawner* s = new Spawner(this);
-//                s->SetPosition(Vector2(32 * j + WALL_DIMEN/2, 32 * i + WALL_DIMEN/2));
-//            }
-//            else if(c != '.') { // any other block
-//                Block* b1 = new Block(this);
-//                std::string assetFile;
-//                assetFile = std::string("Assets/Block") + c + ".png";
-//                b1->ChangeTexture(assetFile);
-//                b1->SetPosition(Vector2(32 * j + WALL_DIMEN/2, 32 * i + WALL_DIMEN/2));
-//            }
-//        }
-//        line.clear();
-//        i++;
-//    }
     
     // play music
 //    mMusicChannel = Mix_PlayChannel(-1, GetSound("Assets/Sounds/Music.ogg"), -1);

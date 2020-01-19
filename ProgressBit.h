@@ -9,10 +9,14 @@
 #pragma once
 #include "Actor.h"
 
-class Progress : public Actor {
+enum class ProgressBitState {
+    Bottom,
+    Center,
+    Top
+};
+
+class ProgressBit : public Actor {
 public:
-    Progress(class Game*);
-    void SetProgress(float percent);
+    ProgressBit(class Game*, Vector2 position, ProgressBitState state);
 private:
-    class SpriteComponent* mSC;
 };

@@ -12,6 +12,9 @@
 #include "Game.h"
 #include "CollisionComponent.h"
 #include "AnimatedSprite.h"
+#include "SpriteComponent.h"
+#include "Player.h"
+#include "Bag.h"
 
 PlayerMove::PlayerMove(Actor* owner)
 : MoveComponent(owner) {
@@ -53,31 +56,25 @@ void PlayerMove::Update(float deltaTime) {
 //        mOwner->SetState(ActorState::Paused);
 //    }
     
-    // fix offset if hit blocks
-//    CollisionComponent* cc = mOwner->GetComponent<CollisionComponent>();
-//    Vector2 offset;
-//    bool touchingBlocks = false;
-//    for(Block* b : mOwner->GetGame()->mBlocks) {
-//        CollSide side = cc->GetMinOverlap(b->mCollisionComponent, offset);
-//        if(side != CollSide::None) {
-//            touchingBlocks = true;
-//            if(side == CollSide::Top && mYSpeed > 0.0f) {
-//                mYSpeed = 0.0f;
-//                mInAir = false;
-//            }
-//            if(side == CollSide::Bottom && mYSpeed < 0.0f) {
-//                mYSpeed = 0.0f;
-//                Mix_PlayChannel(-1, mOwner->GetGame()->GetSound("Assets/Sounds/Bump.wav"), 0);
-//            }
-//            mOwner->SetPosition(mOwner->GetPosition() - offset);
-//        }
-//    }
-//    mInAir = !touchingBlocks;
-    
     // update animation
     std::string animName = mOwner->GetComponent<AnimatedSprite>()->GetAnimName();
-    if(animName == "dead") { // dead
+    Game* game = mOwner->GetGame();
+    if(!game->mGameOver && game->mStarsDone && !game->mWin) { // lost
+        SwitchAnim("sad");
         mOwner->SetState(ActorState::Paused);
+    }
+    else if(!game->mGameOver && game->mStarsDone && game->mWin) { // won
+        if(!mPreparedStar) { // prepare star
+            SwitchAnim("prepare");
+            mMovingRight = false;
+            mOwner->GetComponent<AnimatedSprite>()->RunOnce("idleLeft");
+        }
+        else {
+            // show final star
+            ((Player*)mOwner)->GetBag()->GetComponent<SpriteComponent>()->SetIsVisible(true);
+            game->mGameOver = true;
+//            mOwner->SetState(ActorState::Active);
+        }
     }
     else if(GetForwardSpeed() < 0) { // moving left
         SwitchAnim("runLeft");

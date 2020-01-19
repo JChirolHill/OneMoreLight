@@ -12,6 +12,9 @@
 class Player : public Actor {
 public:
     Player(class Game* game);
+    bool DidWin(int totalPossible);
+    class Bag* GetBag() { return mBag; }
+    void PrepareStar();
 private:
     class AnimatedSprite* mAnimatedSprite;
     class CollisionComponent* mCollisionComponent;

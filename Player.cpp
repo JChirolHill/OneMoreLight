@@ -13,6 +13,7 @@
 #include "Game.h"
 #include "PlayerMove.h"
 #include "Bag.h"
+#include "SpriteComponent.h"
 
 Player::Player(Game* game)
 : Actor(game) {
@@ -38,11 +39,26 @@ Player::Player(Game* game)
         GetGame()->GetTexture("Assets/Lia/RunRight1.png"),
         GetGame()->GetTexture("Assets/Lia/RunRight2.png")
     };
+    std::vector<SDL_Texture*> prepareAnim {
+        GetGame()->GetTexture("Assets/Lia/Prepare0.png"),
+        GetGame()->GetTexture("Assets/Lia/Prepare1.png"),
+        GetGame()->GetTexture("Assets/Lia/Prepare2.png"),
+        GetGame()->GetTexture("Assets/Lia/Prepare3.png"),
+        GetGame()->GetTexture("Assets/Lia/Prepare2.png"),
+        GetGame()->GetTexture("Assets/Lia/Prepare3.png"),
+        GetGame()->GetTexture("Assets/Lia/Prepare2.png"),
+        GetGame()->GetTexture("Assets/Lia/Prepare3.png")
+    };
+    std::vector<SDL_Texture*> sadAnim {
+        GetGame()->GetTexture("Assets/Lia/Sad.png")
+    };
     mAnimatedSprite->AddAnimation("idleLeft", idleLeftAnim);
     mAnimatedSprite->AddAnimation("idleRight", idleRightAnim);
     mAnimatedSprite->AddAnimation("runLeft", runLAnim);
     mAnimatedSprite->AddAnimation("runRight", runRAnim);
-    mAnimatedSprite->SetAnimation("idleRight");
+    mAnimatedSprite->AddAnimation("prepare", prepareAnim);
+    mAnimatedSprite->AddAnimation("sad", sadAnim);
+    mAnimatedSprite->SetAnimation("idleLeft");
 }
 
 void Player::OnProcessInput(const Uint8* keyState) {
@@ -51,4 +67,8 @@ void Player::OnProcessInput(const Uint8* keyState) {
 
 void Player::OnUpdate(float deltaTime) {
     
+}
+
+bool Player::DidWin(int totalPossible) {
+    return mBag->GetStars() >= totalPossible;
 }

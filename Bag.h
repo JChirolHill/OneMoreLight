@@ -20,6 +20,7 @@ private:
     class CollisionComponent* mCC;
     class SpriteComponent* mSC;
     int mNumStars = 0;
+    bool mBagChangedToStar = false;
     
     const int BAG_OFFSET_HORIZ = 100.0f;
     const int BAG_OFFSET_VERT = 25.0f;

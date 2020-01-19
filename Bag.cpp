@@ -13,6 +13,7 @@
 #include "Star.h"
 #include "PlayerMove.h"
 #include "Player.h"
+#include "ProgressBar.h"
 
 Bag::Bag(Game* game, Player* player)
 : Actor(game) {
@@ -35,15 +36,23 @@ void Bag::OnUpdate(float deltaTime) {
             mNumStars++;
             s->SetState(ActorState::Destroy);
             SDL_Log("Num stars: %d", mNumStars);
+            mGame->GetProgressBar()->SetProgress(mNumStars / mGame->STARS_TO_WIN);
         }
     }
 }
 
 void Bag::CalcBagDirection(Player* p) {
+    if(!mGame->mGameOver && mGame->mStarsDone && !mBagChangedToStar) { // change back to visible once done preparing
+        mSC->SetIsVisible(false);
+        mBagChangedToStar = true;
+    }
     PlayerMove* pm = p->GetComponent<PlayerMove>();
     if(pm->GetMovingRight()) {
         SetPosition(p->GetPosition() + Vector2(BAG_OFFSET_HORIZ, BAG_OFFSET_VERT));
-        if(mNumStars > mGame->STARS_TO_WIN - 2) {
+        if(mGame->mGameOver && mBagChangedToStar) { // change bag to star if game over
+            mSC->SetTexture(mGame->GetTexture("Assets/FinalStarRight.png"));
+        }
+        else if(mNumStars > mGame->STARS_TO_WIN - 2) {
             mSC->SetTexture(mGame->GetTexture("Assets/BagFilledRight2.png"));
         }
         else if(mNumStars > mGame->STARS_TO_WIN / 2) {
@@ -58,7 +67,10 @@ void Bag::CalcBagDirection(Player* p) {
     }
     else {
         SetPosition(p->GetPosition() + Vector2(-1.f * BAG_OFFSET_HORIZ, BAG_OFFSET_VERT));
-        if(mNumStars > mGame->STARS_TO_WIN - 2) {
+        if(mGame->mGameOver && mBagChangedToStar) { // change bag to star if game over
+            mSC->SetTexture(mGame->GetTexture("Assets/FinalStarLeft.png"));
+        }
+        else if(mNumStars > mGame->STARS_TO_WIN - 2) {
             mSC->SetTexture(mGame->GetTexture("Assets/BagFilledLeft2.png"));
         }
         else if(mNumStars > mGame->STARS_TO_WIN / 2) {

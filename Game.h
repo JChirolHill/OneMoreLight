@@ -19,14 +19,17 @@ class Game {
         void AddStar(class Star*);
         void RemoveStar(class Star*);
     
-        bool GetWin() { return mWin; }
-        void SetWin() { mWin = true; }
+        SDL_Renderer* GetRenderer() { return renderer; }
         SDL_Texture* GetTexture(std::string);
         Mix_Chunk* GetSound(const std::string& filename);
         class Vector2 GetScreenDimen();
         class Player* GetPlayer();
         int GetMusicChannel() { return mMusicChannel; }
-        class ProgressBar* GetProgresBar() { return mProgressBar; }
+        class ProgressBar* GetProgressBar() { return mProgressBar; }
+        bool mWin = true;
+        bool mSunUp = false;
+        bool mStarsDone = false;
+        bool mGameOver = false;
     
         const int SCREEN_WIDTH = 1020;
         const int SCREEN_HEIGHT = 760;
@@ -35,8 +38,8 @@ class Game {
         const float GRAVITY = 1000.0f;
         const float STAR_SPRITE_RATE = 1.f;
         const float TIME_WARM_UP = 5.0f;
-        const float TIME_TO_DAY = 5.0f;
-        const int STARS_TO_WIN = (int)((TIME_WARM_UP + TIME_TO_DAY) * (22.f/30.f));
+        const float TIME_TO_DAY = 0.0f;
+        const int STARS_TO_WIN = (int)((TIME_WARM_UP + TIME_TO_DAY) * (3.f/4.f));
     
         std::vector<class Star*> mStars;
     private:
@@ -46,8 +49,8 @@ class Game {
         bool mIsRunning;
         int mPreviousTime;
         int mMusicChannel;
-        bool mWin = false;
-        bool mGameOver = false;
+        bool mPrompted = false;
+    
         float starSpriteTimer = 0.0f;
         float mDayOpacity = 0.0f;
         float mWarmUpTimer = 0.0f;
@@ -60,6 +63,7 @@ class Game {
         void UnloadData();
     
         class Player* mPlayer;
+        class Loser* mLoser;
         class ProgressBar* mProgressBar;
         std::vector<class Actor*> actors;
         std::unordered_map<std::string, SDL_Texture*> textures;
