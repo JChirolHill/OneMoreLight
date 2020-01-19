@@ -21,10 +21,12 @@ PlayerMove::PlayerMove(Actor* owner)
 void PlayerMove::ProcessInput(const Uint8* keyState) {
     // check move left and right
     if(keyState[SDL_SCANCODE_LEFT] && !keyState[SDL_SCANCODE_RIGHT]) {
-        SetForwardSpeed(-300.0f);
+        SetForwardSpeed(-1.0f * mForwardSpeed);
+        mMovingRight = false;
     }
     else if(!keyState[SDL_SCANCODE_LEFT] && keyState[SDL_SCANCODE_RIGHT]) {
-        SetForwardSpeed(300.0f);
+        SetForwardSpeed(mForwardSpeed);
+        mMovingRight = true;
     }
     else {
         SetForwardSpeed(0.0f);
@@ -35,11 +37,11 @@ void PlayerMove::Update(float deltaTime) {
     // update player position
     Vector2 updatedPosition = mOwner->GetPosition() + GetForwardSpeed() * mOwner->GetForward() * deltaTime;
     updatedPosition.y = mOwner->GetPosition().y + mYSpeed * deltaTime;
-    if(updatedPosition.x < 0.f) {
-        updatedPosition.x = 0.f;
+    if(updatedPosition.x < EDGE_OFFSET) {
+        updatedPosition.x = EDGE_OFFSET;
     }
-    else if(updatedPosition.x > mOwner->GetGame()->GetScreenDimen().x) {
-        updatedPosition.x = mOwner->GetGame()->GetScreenDimen().x;
+    else if(updatedPosition.x > mOwner->GetGame()->GetScreenDimen().x - EDGE_OFFSET) {
+        updatedPosition.x = mOwner->GetGame()->GetScreenDimen().x - EDGE_OFFSET;
     }
     mOwner->SetPosition(updatedPosition);
     
@@ -84,7 +86,12 @@ void PlayerMove::Update(float deltaTime) {
         SwitchAnim("runRight");
     }
     else { // idle
-        SwitchAnim("idle");
+        if(mMovingRight) {
+            SwitchAnim("idleRight");
+        }
+        else {
+            SwitchAnim("idleLeft");
+        }
     }
 }
 

@@ -15,6 +15,9 @@
 		92D324FD1B697428005A86C7 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D324FC1B697428005A86C7 /* CoreFoundation.framework */; };
 		92E46E941B6353E50035CD21 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E46E931B6353E50035CD21 /* OpenGL.framework */; };
 		BA7D1A7123D3BB43001AF3AA /* Star.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA7D1A6F23D3BB43001AF3AA /* Star.cpp */; };
+		BA7D1A7423D3D269001AF3AA /* Bag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA7D1A7223D3D269001AF3AA /* Bag.cpp */; };
+		BA7D1A7723D41105001AF3AA /* ProgressBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA7D1A7523D41105001AF3AA /* ProgressBar.cpp */; };
+		BA7D1A7A23D41170001AF3AA /* Progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA7D1A7823D41170001AF3AA /* Progress.cpp */; };
 		BAB7D2E22333EE3A0009CD82 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BAB7D2D82333EE390009CD82 /* Random.cpp */; };
 		BAB7D2E32333EE3A0009CD82 /* CollisionComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BAB7D2D92333EE3A0009CD82 /* CollisionComponent.cpp */; };
 		BAB7D2E42333EE3A0009CD82 /* MoveComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BAB7D2DB2333EE3A0009CD82 /* MoveComponent.cpp */; };
@@ -39,6 +42,12 @@
 		92E46E931B6353E50035CD21 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		BA7D1A6F23D3BB43001AF3AA /* Star.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Star.cpp; sourceTree = "<group>"; };
 		BA7D1A7023D3BB43001AF3AA /* Star.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Star.h; sourceTree = "<group>"; };
+		BA7D1A7223D3D269001AF3AA /* Bag.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Bag.cpp; sourceTree = "<group>"; };
+		BA7D1A7323D3D269001AF3AA /* Bag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bag.h; sourceTree = "<group>"; };
+		BA7D1A7523D41105001AF3AA /* ProgressBar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBar.cpp; sourceTree = "<group>"; };
+		BA7D1A7623D41105001AF3AA /* ProgressBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProgressBar.h; sourceTree = "<group>"; };
+		BA7D1A7823D41170001AF3AA /* Progress.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Progress.cpp; sourceTree = "<group>"; };
+		BA7D1A7923D41170001AF3AA /* Progress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Progress.h; sourceTree = "<group>"; };
 		BAB7D2D62333EE390009CD82 /* MoveComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveComponent.h; sourceTree = "<group>"; };
 		BAB7D2D72333EE390009CD82 /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		BAB7D2D82333EE390009CD82 /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
@@ -75,6 +84,12 @@
 				BAB7D2E02333EE3A0009CD82 /* AnimatedSprite.h */,
 				BAB7D2EB2333F4770009CD82 /* PlayerMove.cpp */,
 				BAB7D2EC2333F4770009CD82 /* PlayerMove.h */,
+				BA7D1A7523D41105001AF3AA /* ProgressBar.cpp */,
+				BA7D1A7623D41105001AF3AA /* ProgressBar.h */,
+				BA7D1A7823D41170001AF3AA /* Progress.cpp */,
+				BA7D1A7923D41170001AF3AA /* Progress.h */,
+				BA7D1A7223D3D269001AF3AA /* Bag.cpp */,
+				BA7D1A7323D3D269001AF3AA /* Bag.h */,
 				BA7D1A6F23D3BB43001AF3AA /* Star.cpp */,
 				BA7D1A7023D3BB43001AF3AA /* Star.h */,
 				BAB7D2E82333F2C90009CD82 /* Player.cpp */,
@@ -185,11 +200,14 @@
 			files = (
 				BAB7D2E22333EE3A0009CD82 /* Random.cpp in Sources */,
 				927612C31F466FA50069B824 /* Actor.cpp in Sources */,
+				BA7D1A7A23D41170001AF3AA /* Progress.cpp in Sources */,
+				BA7D1A7423D3D269001AF3AA /* Bag.cpp in Sources */,
 				927612C41F466FA50069B824 /* Component.cpp in Sources */,
 				92924F991EDF6AC900A740A7 /* Main.cpp in Sources */,
 				BAB7D2E42333EE3A0009CD82 /* MoveComponent.cpp in Sources */,
 				BAB7D2E72333EE3A0009CD82 /* SpriteComponent.cpp in Sources */,
 				BAB7D2E32333EE3A0009CD82 /* CollisionComponent.cpp in Sources */,
+				BA7D1A7723D41105001AF3AA /* ProgressBar.cpp in Sources */,
 				BA7D1A7123D3BB43001AF3AA /* Star.cpp in Sources */,
 				BAB7D2EA2333F2C90009CD82 /* Player.cpp in Sources */,
 				BAB7D2ED2333F4770009CD82 /* PlayerMove.cpp in Sources */,

@@ -12,6 +12,7 @@
 class Star : public Actor {
 public:
     Star(class Game* game, bool normalStar);
+    ~Star();
 private:
     void OnUpdate(float deltaTime) override;
     

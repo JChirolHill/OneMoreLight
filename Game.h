@@ -26,14 +26,19 @@ class Game {
         class Vector2 GetScreenDimen();
         class Player* GetPlayer();
         int GetMusicChannel() { return mMusicChannel; }
+        class ProgressBar* GetProgresBar() { return mProgressBar; }
     
         const int SCREEN_WIDTH = 1020;
         const int SCREEN_HEIGHT = 760;
         const float STAR_LEVEL = 150.f;
-        const float GRASS_LEVEL = 660.f;
+        const float GRASS_LEVEL = 575.f;
         const float GRAVITY = 1000.0f;
         const float STAR_SPRITE_RATE = 1.f;
-        const float TIME_TO_DAY = 30.0f;
+        const float TIME_WARM_UP = 5.0f;
+        const float TIME_TO_DAY = 5.0f;
+        const int STARS_TO_WIN = (int)((TIME_WARM_UP + TIME_TO_DAY) * (22.f/30.f));
+    
+        std::vector<class Star*> mStars;
     private:
         SDL_Window* window;
         SDL_Renderer *renderer;
@@ -41,9 +46,11 @@ class Game {
         bool mIsRunning;
         int mPreviousTime;
         int mMusicChannel;
-        bool mWin;
+        bool mWin = false;
+        bool mGameOver = false;
         float starSpriteTimer = 0.0f;
         float mDayOpacity = 0.0f;
+        float mWarmUpTimer = 0.0f;
     
         void ProcessInput();
         void UpdateGame();
@@ -53,8 +60,8 @@ class Game {
         void UnloadData();
     
         class Player* mPlayer;
+        class ProgressBar* mProgressBar;
         std::vector<class Actor*> actors;
-        std::vector<class Star*> mStars;
         std::unordered_map<std::string, SDL_Texture*> textures;
         std::unordered_map<std::string, Mix_Chunk*> sounds;
         std::vector<class SpriteComponent*> mSprites;

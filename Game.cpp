@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "Star.h"
 #include "SpriteComponent.h"
+#include "ProgressBar.h"
 
 Game::Game() {
     // set variables
@@ -115,23 +116,30 @@ void Game::UpdateGame() {
     mPreviousTime = currentTime;
     
     // update background to day, game stop condition
-    mDayOpacity += deltaTime * 255.0f / TIME_TO_DAY;
-    SDL_Log("opacity: %f", mDayOpacity);
-    if(mDayOpacity > 255.0f) {
-        mDayOpacity = 255.0f;
-        mPlayer->SetState(ActorState::Paused);
-    }
-    else {
-        SDL_SetTextureAlphaMod(mBackgroundTextureDay, (int)mDayOpacity);
+    mWarmUpTimer += deltaTime;
+    if(mWarmUpTimer > TIME_WARM_UP) {
+        mDayOpacity += deltaTime * 255.0f / TIME_TO_DAY;
+        if(mDayOpacity > 255.0f) {
+            mDayOpacity = 255.0f;
+            mGameOver = true;
+        }
+        else {
+            SDL_SetTextureAlphaMod(mBackgroundTextureDay, (int)mDayOpacity);
+        }
     }
     
     // spawn new stars
-    if(mPlayer->GetState() == ActorState::Active) {
+    if(!mGameOver) {
         starSpriteTimer += deltaTime;
         if(starSpriteTimer > STAR_SPRITE_RATE) {
             starSpriteTimer = 0.0f;
             AddStar(new Star(this, true));
         }
+    }
+    
+    // stop player moving if all stars gone
+    if(mGameOver && mStars.size() == 0) {
+        mPlayer->SetState(ActorState::Paused);
     }
     
     // make a copy of actors vector and update
@@ -209,10 +217,10 @@ void Game::RemoveSprite(SpriteComponent* sprite) {
 
 void Game::LoadData() {
     // background
-//    Actor* background = new Actor(this);
-//    background->SetPosition(Vector2(510.f, 380.f));
-//    SpriteComponent* scBack = new SpriteComponent(background, 90);
-//    scBack->SetTexture(GetTexture("Assets/NightBackground.png"));
+    Actor* background = new Actor(this);
+    background->SetPosition(Vector2(510.f, 380.f));
+    SpriteComponent* scBack = new SpriteComponent(background, 90);
+    scBack->SetTexture(GetTexture("Assets/NightBackground.png"));
     
     Actor* backgroundDay = new Actor(this);
     backgroundDay->SetPosition(Vector2(510.f, 380.f));
@@ -223,7 +231,10 @@ void Game::LoadData() {
     
     // load player
     mPlayer = new Player(this);
-    mPlayer->SetPosition(Vector2(100.f, GRASS_LEVEL));
+    mPlayer->SetPosition(Vector2(200.f, GRASS_LEVEL));
+    
+    // show progress bar
+    mProgressBar = new ProgressBar(this);
     
     // load blocks from the input file
 //    std::ifstream inputFile("Assets/Level1.txt");

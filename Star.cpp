@@ -10,11 +10,13 @@
 #include "Game.h"
 #include "SpriteComponent.h"
 #include "Random.h"
+#include "CollisionComponent.h"
 
 Star::Star(Game* game, bool normalStar)
 : Actor(game) {
-    // set scale
     SetScale(0.1f);
+    CollisionComponent* cc = new CollisionComponent(this);
+    cc->SetSize(82.0f, 85.0f);
     
     // set sprite image
     if(normalStar) {
@@ -30,6 +32,10 @@ Star::Star(Game* game, bool normalStar)
     Random* rand = new Random();
     Vector2 spawnPosition = Vector2(rand->GetFloat() * game->GetScreenDimen().x, rand->GetFloat() * game->STAR_LEVEL);
     SetPosition(spawnPosition);
+}
+
+Star::~Star() {
+    mGame->RemoveStar(this);
 }
 
 void Star::OnUpdate(float deltaTime) {

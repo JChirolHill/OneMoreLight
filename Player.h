@@ -16,6 +16,7 @@ private:
     class AnimatedSprite* mAnimatedSprite;
     class CollisionComponent* mCollisionComponent;
     class PlayerMove* mPlayerMove;
+    class Bag* mBag;
     
     void OnProcessInput(const Uint8* keyState) override;
     void OnUpdate(float deltaTime) override;
