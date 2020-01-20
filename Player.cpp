@@ -14,6 +14,7 @@
 #include "PlayerMove.h"
 #include "Bag.h"
 #include "SpriteComponent.h"
+#include "Loser.h"
 
 Player::Player(Game* game)
 : Actor(game) {

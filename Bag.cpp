@@ -14,6 +14,7 @@
 #include "PlayerMove.h"
 #include "Player.h"
 #include "ProgressBar.h"
+#include "Loser.h"
 
 Bag::Bag(Game* game, Player* player)
 : Actor(game) {
@@ -38,6 +39,15 @@ void Bag::OnUpdate(float deltaTime) {
             SDL_Log("Num stars: %d", mNumStars);
             mGame->GetProgressBar()->SetProgress(mNumStars / mGame->STARS_TO_WIN);
         }
+    }
+    
+    // check near enough to Aren for closing animation
+    Loser* loser = mGame->GetLoser();
+    Player* player = mGame->GetPlayer();
+    if(mGame->mGameOver && mCC->Intersect(loser->GetComponent<CollisionComponent>())) {
+        player->GetComponent<PlayerMove>()->SwitchAnim("idleLeft");
+        player->SetState(ActorState::Paused);
+        loser->SwitchAnim("wake");
     }
 }
 

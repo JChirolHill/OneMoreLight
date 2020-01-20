@@ -14,9 +14,9 @@
 Loser::Loser(Game* game)
 : Actor(game) {
     CollisionComponent* cc = new CollisionComponent(this);
-    cc->SetSize(32.0f, 32.0f);
+    cc->SetSize(120.0f, 212.0f);
     
-    AnimatedSprite* animSprite = new AnimatedSprite(this);
+    mAS = new AnimatedSprite(this);
     std::vector<SDL_Texture*> idle {
         GetGame()->GetTexture("Assets/Aren/Idle.png")
     };
@@ -25,10 +25,20 @@ Loser::Loser(Game* game)
         GetGame()->GetTexture("Assets/Aren/Wake1.png"),
         GetGame()->GetTexture("Assets/Aren/Wake2.png"),
         GetGame()->GetTexture("Assets/Aren/Wake3.png"),
-        GetGame()->GetTexture("Assets/Aren/Wake4.png"),
+        GetGame()->GetTexture("Assets/Aren/Wake4.png")
+    };
+    std::vector<SDL_Texture*> litUpAnim {
         GetGame()->GetTexture("Assets/Aren/Wake5.png")
     };
-    animSprite->AddAnimation("idle", idle);
-    animSprite->AddAnimation("wake", wakeAnim);
-    animSprite->SetAnimation("idle");
+    mAS->AddAnimation("idle", idle);
+    mAS->AddAnimation("wake", wakeAnim);
+    mAS->AddAnimation("litUp", litUpAnim);
+    mAS->SetAnimation("idle");
+}
+
+void Loser::SwitchAnim(std::string animName) {
+    mAS->SetAnimation(animName);
+    if(animName == "wake") {
+        mAS->RunOnce("litUp");
+    }
 }

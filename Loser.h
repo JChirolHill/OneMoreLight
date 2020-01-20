@@ -12,5 +12,7 @@
 class Loser : public Actor {
 public:
     Loser(class Game* game);
+    void SwitchAnim(std::string animName);
 private:
+    class AnimatedSprite* mAS;
 };
