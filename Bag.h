@@ -13,6 +13,7 @@ class Bag : public Actor {
 public:
     Bag(class Game* game, class Player* player);
     int GetStars() { return mNumStars; }
+    void SetInterpolateMove(bool interpolate) { this->mInterpolateMove = interpolate; }
 private:
     void OnUpdate(float deltaTime) override;
     void CalcBagDirection(class Player* player);
@@ -21,7 +22,11 @@ private:
     class SpriteComponent* mSC;
     int mNumStars = 0;
     bool mBagChangedToStar = false;
+    bool mInterpolateMove = false;
+    float mInterpolateTimer = 0.0f;
+    float mStartInterpolatePos = -1.0f;
     
     const int BAG_OFFSET_HORIZ = 100.0f;
     const int BAG_OFFSET_VERT = 25.0f;
+    const float INTERPOLATE_TIME = 0.25f;
 };

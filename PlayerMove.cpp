@@ -48,26 +48,28 @@ void PlayerMove::Update(float deltaTime) {
     }
     mOwner->SetPosition(updatedPosition);
     
-    // check win
-//    if(mOwner->GetPosition().x > 6368.0f && !mOwner->GetGame()->GetWin()) {
-//        mOwner->GetGame()->SetWin();
-//        Mix_HaltChannel(mOwner->GetGame()->GetMusicChannel());
-//        Mix_PlayChannel(-1, mOwner->GetGame()->GetSound("Assets/Sounds/StageClear.wav"), 0);
-//        mOwner->SetState(ActorState::Paused);
-//    }
-    
     // update animation
     std::string animName = mOwner->GetComponent<AnimatedSprite>()->GetAnimName();
     Game* game = mOwner->GetGame();
+    SDL_Log("hug: %d", ((Player*)mOwner)->mHug);
     if(!game->mGameOver && game->mStarsDone && !game->mWin) { // lost
         SwitchAnim("sad");
         mOwner->SetState(ActorState::Paused);
     }
-    else if(!game->mGameOver && game->mStarsDone && game->mWin) { // won
+    else if(((Player*)mOwner)->mHug) { // won and gave star
+        SwitchAnim("hug");
+    }
+    else if(!game->mGameOver && game->mStarsDone && game->mWin) { // won and still need to prepare star
         if(!mPreparedStar) { // prepare star
             SwitchAnim("prepare");
             mMovingRight = false;
-            mOwner->GetComponent<AnimatedSprite>()->RunOnce("idleLeft");
+            // set callback for when done preparing star
+            mOwner->GetComponent<AnimatedSprite>()->SetOnRunOnce([this] {
+                std::string nextAnim = "idleLeft";
+                AnimatedSprite* as = this->mOwner->GetComponent<AnimatedSprite>();
+                as->SetAnimation(nextAnim);
+                this->mOwner->GetComponent<PlayerMove>()->mPreparedStar = true;
+            });
         }
         else {
             // show final star

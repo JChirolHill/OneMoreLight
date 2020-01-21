@@ -10,6 +10,7 @@
 #include "Game.h"
 #include "CollisionComponent.h"
 #include "SpriteComponent.h"
+#include "AnimatedSprite.h"
 #include "Star.h"
 #include "PlayerMove.h"
 #include "Player.h"
@@ -34,6 +35,7 @@ void Bag::OnUpdate(float deltaTime) {
     for(Star* s : GetGame()->mStars) {
         CollisionComponent* starCC = s->GetComponent<CollisionComponent>();
         if(starCC->Intersect(mCC)) { // caught star
+//            Mix_PlayChannel(-1, GetGame()->GetSound("Assets/Sounds/big_star_high.wav"), 0);
             mNumStars++;
             s->SetState(ActorState::Destroy);
             SDL_Log("Num stars: %d", mNumStars);
@@ -44,10 +46,37 @@ void Bag::OnUpdate(float deltaTime) {
     // check near enough to Aren for closing animation
     Loser* loser = mGame->GetLoser();
     Player* player = mGame->GetPlayer();
-    if(mGame->mGameOver && mCC->Intersect(loser->GetComponent<CollisionComponent>())) {
-        player->GetComponent<PlayerMove>()->SwitchAnim("idleLeft");
-        player->SetState(ActorState::Paused);
+    if(mGame->mGameOver && player->GetState() != ActorState::Paused && mCC->Intersect(loser->GetComponent<CollisionComponent>())) {
+        player->GetComponent<AnimatedSprite>()->SetOnRunOnce([this] {
+            Player* player = this->GetGame()->GetPlayer();
+            std::string nextAnim = "idleLeft";
+            AnimatedSprite* as = player->GetComponent<AnimatedSprite>();
+            as->SetAnimation(nextAnim);
+            player->SetState(ActorState::Paused);
+        });
         loser->SwitchAnim("wake");
+    }
+    
+    // allow final star/bag to move towards loser
+    if(mInterpolateMove) {
+        // set start pos if first time running interpolation
+        if(mStartInterpolatePos < 0.0f) {
+            mStartInterpolatePos = GetPosition().x;
+        }
+        
+        // interpolate
+        mInterpolateTimer += deltaTime;
+        if(mInterpolateTimer < INTERPOLATE_TIME) {
+            SetPosition(Vector2(Math::Lerp(mStartInterpolatePos, loser->GetPosition().x, mInterpolateTimer / INTERPOLATE_TIME), GetPosition().y));
+        }
+        else {
+            // stop lerping and hide final star
+            mInterpolateMove = false;
+            mSC->SetIsVisible(false);
+            
+            // light up loser
+            loser->SwitchAnim("litUp");
+        }
     }
 }
 

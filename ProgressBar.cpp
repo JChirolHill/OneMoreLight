@@ -24,14 +24,19 @@ ProgressBar::ProgressBar(Game* game)
 }
 
 void ProgressBar::SetProgress(float percent) {
-//        SDL_Log("num bits: %d, in bar: %f", mNumBits, NUM_BITS_IN_BAR);
-        // calc if need extra bits for this star (only first and last star)
+    // calc if need extra bits for this star (only first and last star)
     int numExtraBits = 0;
-//    if(mNumBits == 0 || mGame->GetPlayer()->GetBag()->GetStars() == mGame->STARS_TO_WIN) {
     if(mNumBits == 0 || mNumBits >= NUM_BITS_IN_BAR - mBitsPerStar - mLeftOverBits / 2) {
-        numExtraBits += mLeftOverBits / 2;
+        if(mLeftOverBits % 2 == 1) { // only account for odd leftover bit once
+            numExtraBits += (mLeftOverBits + 1) / 2;
+            --mLeftOverBits;
+        }
+        else {
+            numExtraBits += mLeftOverBits / 2;
+        }
     }
 
+    // only add new bits if would not spill over the progress bar limit
     if(mNumBits + mBitsPerStar + numExtraBits <= NUM_BITS_IN_BAR) {
         // populate the bits
         for(int i=0; i<mBitsPerStar + numExtraBits; ++i) {
@@ -47,6 +52,6 @@ void ProgressBar::SetProgress(float percent) {
             mNumBits++;
             mBitPos -= Vector2(0.0f, PROGRESS_BIT_HEIGHT);
         }
-        SDL_Log("%d more bits, total: %d", mBitsPerStar + numExtraBits, mNumBits);
+//        SDL_Log("%d more bits, total: %d", mBitsPerStar + numExtraBits, mNumBits);
     }
 }

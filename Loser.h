@@ -12,7 +12,13 @@
 class Loser : public Actor {
 public:
     Loser(class Game* game);
+    ~Loser();
     void SwitchAnim(std::string animName);
 private:
     class AnimatedSprite* mAS;
+    float mLitUpTimer = 0.0f;
+    
+    const float LIT_UP_TIME = 0.5f;
+    
+    void OnUpdate(float deltaTime) override;
 };

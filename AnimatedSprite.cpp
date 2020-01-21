@@ -15,11 +15,9 @@ void AnimatedSprite::Update(float deltaTime)
             mAnimTimer += mAnimFPS * deltaTime;
             while(mAnimTimer >= mAnims[mAnimName].size()) {
                 mAnimTimer -= mAnims[mAnimName].size();
-                if(mRunOnce) { // done with one execution
-                    mRunOnce = false;
-                    SetAnimation(mNextAnim);
-                    mNextAnim = "";
-                    mOwner->GetComponent<PlayerMove>()->mPreparedStar = true;
+                if(mOnRunOnce) { // done with one execution
+                    mOnRunOnce();
+                    mOnRunOnce = nullptr;
                 }
             }
         }
@@ -47,7 +45,7 @@ void AnimatedSprite::AddAnimation(const std::string& name,
 	mAnims.emplace(name, images);
 }
 
-void AnimatedSprite::RunOnce(const std::string& nextAnim) {
-    mRunOnce = true;
-    mNextAnim = nextAnim;
-}
+//void AnimatedSprite::RunOnce(const std::string& nextAnim) {
+//    mRunOnce = true;
+//    mNextAnim = nextAnim;
+//}

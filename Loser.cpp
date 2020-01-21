@@ -10,6 +10,8 @@
 #include "Game.h"
 #include "CollisionComponent.h"
 #include "AnimatedSprite.h"
+#include "Player.h"
+#include "Bag.h"
 
 Loser::Loser(Game* game)
 : Actor(game) {
@@ -24,7 +26,9 @@ Loser::Loser(Game* game)
         GetGame()->GetTexture("Assets/Aren/Wake0.png"),
         GetGame()->GetTexture("Assets/Aren/Wake1.png"),
         GetGame()->GetTexture("Assets/Aren/Wake2.png"),
-        GetGame()->GetTexture("Assets/Aren/Wake3.png"),
+        GetGame()->GetTexture("Assets/Aren/Wake3.png")
+    };
+    std::vector<SDL_Texture*> waitForLightAnim {
         GetGame()->GetTexture("Assets/Aren/Wake4.png")
     };
     std::vector<SDL_Texture*> litUpAnim {
@@ -32,13 +36,43 @@ Loser::Loser(Game* game)
     };
     mAS->AddAnimation("idle", idle);
     mAS->AddAnimation("wake", wakeAnim);
+    mAS->AddAnimation("waitForLight", waitForLightAnim);
     mAS->AddAnimation("litUp", litUpAnim);
     mAS->SetAnimation("idle");
+}
+
+Loser::~Loser() {
+    mGame->SetLoser(nullptr);
 }
 
 void Loser::SwitchAnim(std::string animName) {
     mAS->SetAnimation(animName);
     if(animName == "wake") {
-        mAS->RunOnce("litUp");
+        mAS->SetOnRunOnce([this] {
+            // change animation to waiting to receive the light
+            std::string nextAnim = "waitForLight";
+            AnimatedSprite* as = this->GetComponent<AnimatedSprite>();
+            as->SetAnimation(nextAnim);
+            
+            // trigger moving the light to light him up
+            this->mGame->GetPlayer()->GetBag()->SetInterpolateMove(true);
+        });
+    }
+}
+
+void Loser::OnUpdate(float deltaTime) {
+    // trigger hug once lit up long enough
+    if(mAS->GetAnimName() == "litUp") {
+        mLitUpTimer += deltaTime;
+        if(mLitUpTimer >= LIT_UP_TIME) {
+            mAS->SetIsVisible(false);
+            SetState(ActorState::Destroy);
+//            mAS->SetAnimation("idle");
+            
+            // set hug animation
+            Player* p = mGame->GetPlayer();
+            p->SetState(ActorState::Active);
+            p->mHug = true;
+        }
     }
 }

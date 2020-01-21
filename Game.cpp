@@ -246,7 +246,7 @@ void Game::LoadData() {
     mProgressBar = new ProgressBar(this);
     
     // play music
-//    mMusicChannel = Mix_PlayChannel(-1, GetSound("Assets/Sounds/Music.ogg"), -1);
+//    mMusicChannel = Mix_PlayChannel(-1, GetSound("Assets/Sounds/star_gazing.wav"), -1);
 }
 
 void Game::UnloadData() {

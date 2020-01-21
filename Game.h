@@ -25,6 +25,7 @@ class Game {
         class Vector2 GetScreenDimen();
         class Player* GetPlayer();
         class Loser* GetLoser() { return mLoser; }
+        void SetLoser(Loser* loser) { mLoser = loser; }
         int GetMusicChannel() { return mMusicChannel; }
         class ProgressBar* GetProgressBar() { return mProgressBar; }
         bool mWin = true;
@@ -39,7 +40,7 @@ class Game {
         const float GRAVITY = 1000.0f;
         const float STAR_SPRITE_RATE = 1.f;
         const float TIME_WARM_UP = 5.0f;
-        const float TIME_TO_DAY = 5.0f;
+        const float TIME_TO_DAY = 0.0f;
         const int STARS_TO_WIN = (int)((TIME_WARM_UP + TIME_TO_DAY) * (3.f/4.f));
     
         std::vector<class Star*> mStars;

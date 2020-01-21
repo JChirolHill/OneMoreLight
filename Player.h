@@ -15,6 +15,7 @@ public:
     bool DidWin(int totalPossible);
     class Bag* GetBag() { return mBag; }
     void PrepareStar();
+    bool mHug = false;
 private:
     class AnimatedSprite* mAnimatedSprite;
     class CollisionComponent* mCollisionComponent;

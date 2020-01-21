@@ -53,12 +53,16 @@ Player::Player(Game* game)
     std::vector<SDL_Texture*> sadAnim {
         GetGame()->GetTexture("Assets/Lia/Sad.png")
     };
+    std::vector<SDL_Texture*> hugAnim {
+        GetGame()->GetTexture("Assets/Lia/Hug.png")
+    };
     mAnimatedSprite->AddAnimation("idleLeft", idleLeftAnim);
     mAnimatedSprite->AddAnimation("idleRight", idleRightAnim);
     mAnimatedSprite->AddAnimation("runLeft", runLAnim);
     mAnimatedSprite->AddAnimation("runRight", runRAnim);
     mAnimatedSprite->AddAnimation("prepare", prepareAnim);
     mAnimatedSprite->AddAnimation("sad", sadAnim);
+    mAnimatedSprite->AddAnimation("hug", hugAnim);
     mAnimatedSprite->SetAnimation("idleLeft");
 }
 

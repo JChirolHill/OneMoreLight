@@ -28,7 +28,8 @@ public:
 	// Get the name of the currently-playing animation
 	const std::string& GetAnimName() const { return mAnimName; }
     
-    void RunOnce(const std::string& nextAnim);
+//    void RunOnce(const std::string& nextAnim);
+    void SetOnRunOnce(std::function<void()> func) { mOnRunOnce = func; }
 protected:
 	// Map of animation name to vector of textures corresponding to the animation
 	std::unordered_map<std::string, std::vector<SDL_Texture*>> mAnims;
@@ -45,6 +46,7 @@ protected:
 	// The frames per second the animation should run at
 	float mAnimFPS = 10.0f;
     
-    bool mRunOnce = false;
+//    bool mRunOnce = false;
+    std::function<void()> mOnRunOnce;
     std::string mNextAnim;
 };
