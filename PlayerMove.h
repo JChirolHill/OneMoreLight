@@ -24,5 +24,6 @@ public:
 private:
     float mYSpeed;
     float mForwardSpeed = 500.0f;
+    bool mPlayedEnding = false;
     const float EDGE_OFFSET = 150.0f;
 };

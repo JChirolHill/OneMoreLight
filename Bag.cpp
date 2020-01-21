@@ -46,7 +46,7 @@ void Bag::OnUpdate(float deltaTime) {
     // check near enough to Aren for closing animation
     Loser* loser = mGame->GetLoser();
     Player* player = mGame->GetPlayer();
-    if(mGame->mGameOver && player->GetState() != ActorState::Paused && mCC->Intersect(loser->GetComponent<CollisionComponent>())) {
+    if(!player->mHug && mGame->mGameOver && player->GetState() != ActorState::Paused && mCC->Intersect(loser->GetComponent<CollisionComponent>())) {
         player->GetComponent<AnimatedSprite>()->SetOnRunOnce([this] {
             Player* player = this->GetGame()->GetPlayer();
             std::string nextAnim = "idleLeft";

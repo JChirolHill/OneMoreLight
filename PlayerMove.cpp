@@ -58,6 +58,10 @@ void PlayerMove::Update(float deltaTime) {
     }
     else if(((Player*)mOwner)->mHug) { // won and gave star
         SwitchAnim("hug");
+        if(!mPlayedEnding) {
+//            Mix_PlayChannel(-1, mOwner->GetGame()->GetSound("Assets/Sounds/ending_cut.wav"), 0);
+            mPlayedEnding = true;
+        }
     }
     else if(!game->mGameOver && game->mStarsDone && game->mWin) { // won and still need to prepare star
         if(!mPreparedStar) { // prepare star
@@ -75,7 +79,6 @@ void PlayerMove::Update(float deltaTime) {
             // show final star
             ((Player*)mOwner)->GetBag()->GetComponent<SpriteComponent>()->SetIsVisible(true);
             game->mGameOver = true;
-//            mOwner->SetState(ActorState::Active);
         }
     }
     else if(GetForwardSpeed() < 0) { // moving left

@@ -66,11 +66,10 @@ void Loser::OnUpdate(float deltaTime) {
         mLitUpTimer += deltaTime;
         if(mLitUpTimer >= LIT_UP_TIME) {
             mAS->SetIsVisible(false);
-            SetState(ActorState::Destroy);
-//            mAS->SetAnimation("idle");
             
             // set hug animation
             Player* p = mGame->GetPlayer();
+            p->SetPosition(GetPosition());
             p->SetState(ActorState::Active);
             p->mHug = true;
         }
