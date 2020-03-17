@@ -99,6 +99,26 @@ void Game::ProcessInput() {
         mIsRunning = false;
     }
     
+    // if showing menu to play again, handle yes (Y) and no (N)
+    if(mGameOver) {
+        if(state[SDL_SCANCODE_Y]) {
+            // reset game
+            mWin = true;
+            mSunUp = false;
+            mStarsDone = false;
+            mGameOver = false;
+            starSpriteTimer = 0.0f;
+            mDayOpacity = 0.0f;
+            mWarmUpTimer = 0.0f;
+            
+            UnloadData();
+            LoadData();
+        }
+        else if(state[SDL_SCANCODE_N]) {
+            mIsRunning = false;
+        }
+    }
+    
     // copy actors and call process input on all
     std::vector<Actor*> copyActors = actors;
     for(Actor* a : copyActors) {
@@ -138,7 +158,7 @@ void Game::UpdateGame() {
         }
     }
     
-    // stop player moving if all stars gone
+    // stop player moving if all stars completely gone
     if(mSunUp && mStars.size() == 0) {
         mStarsDone = true;
         if(mPlayer->DidWin(STARS_TO_WIN)) {

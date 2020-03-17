@@ -51,10 +51,11 @@ void PlayerMove::Update(float deltaTime) {
     // update animation
     std::string animName = mOwner->GetComponent<AnimatedSprite>()->GetAnimName();
     Game* game = mOwner->GetGame();
-    SDL_Log("hug: %d", ((Player*)mOwner)->mHug);
-    if(!game->mGameOver && game->mStarsDone && !game->mWin) { // lost
+//    SDL_Log("hug: %d", ((Player*)mOwner)->mHug);
+    if(game->mStarsDone && !game->mWin) { // lost
         SwitchAnim("sad");
         mOwner->SetState(ActorState::Paused);
+        mOwner->GetGame()->mGameOver = true;
     }
     else if(((Player*)mOwner)->mHug) { // won and gave star
         SwitchAnim("hug");
@@ -63,7 +64,7 @@ void PlayerMove::Update(float deltaTime) {
             mPlayedEnding = true;
         }
     }
-    else if(!game->mGameOver && game->mStarsDone && game->mWin) { // won and still need to prepare star
+    else if(game->mStarsDone && game->mWin) { // won and still need to prepare star
         if(!mPreparedStar) { // prepare star
             SwitchAnim("prepare");
             mMovingRight = false;
@@ -78,7 +79,6 @@ void PlayerMove::Update(float deltaTime) {
         else {
             // show final star
             ((Player*)mOwner)->GetBag()->GetComponent<SpriteComponent>()->SetIsVisible(true);
-            game->mGameOver = true;
         }
     }
     else if(GetForwardSpeed() < 0) { // moving left

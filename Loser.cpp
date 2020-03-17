@@ -72,6 +72,7 @@ void Loser::OnUpdate(float deltaTime) {
             p->SetPosition(GetPosition());
             p->SetState(ActorState::Active);
             p->mHug = true;
+            GetGame()->mGameOver = true;
         }
     }
 }

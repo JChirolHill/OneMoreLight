@@ -27,7 +27,7 @@ void AnimatedSprite::Update(float deltaTime)
 
 void AnimatedSprite::SetAnimation(const std::string& name, bool resetTimer)
 {
-    SDL_Log("new anim: %s", name.c_str());
+//    SDL_Log("new anim: %s", name.c_str());
 	if (mAnimName != name)
 	{
 		mAnimName = name;

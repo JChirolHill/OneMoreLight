@@ -38,7 +38,7 @@ void Bag::OnUpdate(float deltaTime) {
 //            Mix_PlayChannel(-1, GetGame()->GetSound("Assets/Sounds/big_star_high.wav"), 0);
             mNumStars++;
             s->SetState(ActorState::Destroy);
-            SDL_Log("Num stars: %d", mNumStars);
+//            SDL_Log("Num stars: %d", mNumStars);
             mGame->GetProgressBar()->SetProgress(mNumStars / mGame->STARS_TO_WIN);
         }
     }
@@ -46,7 +46,7 @@ void Bag::OnUpdate(float deltaTime) {
     // check near enough to Aren for closing animation
     Loser* loser = mGame->GetLoser();
     Player* player = mGame->GetPlayer();
-    if(!player->mHug && mGame->mGameOver && player->GetState() != ActorState::Paused && mCC->Intersect(loser->GetComponent<CollisionComponent>())) {
+    if(GetGame()->mStarsDone && !player->mHug && player->GetState() != ActorState::Paused && mCC->Intersect(loser->GetComponent<CollisionComponent>())) {
         player->GetComponent<AnimatedSprite>()->SetOnRunOnce([this] {
             Player* player = this->GetGame()->GetPlayer();
             std::string nextAnim = "idleLeft";
@@ -81,14 +81,14 @@ void Bag::OnUpdate(float deltaTime) {
 }
 
 void Bag::CalcBagDirection(Player* p) {
-    if(!mGame->mGameOver && mGame->mStarsDone && !mBagChangedToStar) { // change back to visible once done preparing
+    if(mGame->mStarsDone && !mBagChangedToStar) { // change back to visible once done preparing
         mSC->SetIsVisible(false);
         mBagChangedToStar = true;
     }
     PlayerMove* pm = p->GetComponent<PlayerMove>();
     if(pm->GetMovingRight()) {
         SetPosition(p->GetPosition() + Vector2(BAG_OFFSET_HORIZ, BAG_OFFSET_VERT));
-        if(mGame->mGameOver && mBagChangedToStar) { // change bag to star if game over
+        if(mGame->mStarsDone && mBagChangedToStar) { // change bag to star if all stars gone
             mSC->SetTexture(mGame->GetTexture("Assets/FinalStarRight.png"));
         }
         else if(mNumStars > mGame->STARS_TO_WIN - 2) {
@@ -106,7 +106,7 @@ void Bag::CalcBagDirection(Player* p) {
     }
     else {
         SetPosition(p->GetPosition() + Vector2(-1.f * BAG_OFFSET_HORIZ, BAG_OFFSET_VERT));
-        if(mGame->mGameOver && mBagChangedToStar) { // change bag to star if game over
+        if(mGame->mStarsDone && mBagChangedToStar) { // change bag to star if game over
             mSC->SetTexture(mGame->GetTexture("Assets/FinalStarLeft.png"));
         }
         else if(mNumStars > mGame->STARS_TO_WIN - 2) {

@@ -40,7 +40,7 @@ class Game {
         const float GRAVITY = 1000.0f;
         const float STAR_SPRITE_RATE = 1.f;
         const float TIME_WARM_UP = 5.0f;
-        const float TIME_TO_DAY = 30.0f;
+        const float TIME_TO_DAY = 0.0f;
         const int STARS_TO_WIN = (int)((TIME_WARM_UP + TIME_TO_DAY) * (2.f/4.f));
     
         std::vector<class Star*> mStars;
@@ -51,7 +51,6 @@ class Game {
         bool mIsRunning;
         int mPreviousTime;
         int mMusicChannel;
-        bool mPrompted = false;
     
         float starSpriteTimer = 0.0f;
         float mDayOpacity = 0.0f;
